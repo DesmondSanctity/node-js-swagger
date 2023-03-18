@@ -23,7 +23,7 @@ export async function create(req, res) {
 
         // return save result as a response
         post.save()
-            .then(result => res.status(201).send({ msg: "Post created Successfully" }))
+            .then(result => res.status(201).send({ msg: "Post created Successfully", Post: post }))
             .catch(error => res.status(500).send({ error }))
 
     } catch (error) {
@@ -35,13 +35,13 @@ export async function create(req, res) {
 /** GET: http://localhost:8080/api/post/user123/ */
 export async function getUserPosts(req, res) {
 
-    const { username } = req.params;
+    const { userId } = req.params;
 
     try {
 
-        if (!username) return res.status(501).send({ error: "Invalid Username" });
+        if (!userId) return res.status(501).send({ error: "Invalid Username" });
 
-        PostModel.find({ username }, function (err, data) {
+        PostModel.find({ author: userId }, function (err, data) {
             if (err) return res.status(500).send({ err });
             if (!data) return res.status(501).send({ error: "Couldn't Find the User Posts" });
 
@@ -57,13 +57,13 @@ export async function getUserPosts(req, res) {
 /** GET: http://localhost:8080/api/post/user123/id */
 export async function getUserPost(req, res) {
 
-    const { username, postId } = req.params;
+    const { userId, postId } = req.params;
 
     try {
 
-        if (!username) return res.status(501).send({ error: "Invalid Username" });
+        if (!userId) return res.status(501).send({ error: "Invalid Username" });
 
-        PostModel.find({ author: username, _id: postId }, function (err, post) {
+        PostModel.find({ author: userId, _id: postId }, function (err, post) {
             if (err) return res.status(500).send({ err });
             if (!post) return res.status(501).send({ error: "Couldn't Find the User/Post" });
 
@@ -91,7 +91,7 @@ body: {
 export async function updatePost(req, res) {
     try {
 
-        const { postId } = req.body.postId;
+        const { postId } = req.body;
 
         if (postId) {
             const body = req.body;
@@ -100,11 +100,11 @@ export async function updatePost(req, res) {
             PostModel.updateOne({ _id: postId }, body, function (err, data) {
                 if (err) throw err;
 
-                return res.status(201).send({ msg: "Record Updated...!" }).json(data);
+                return res.status(201).send({ msg: "Record Updated...!" })
             })
 
         } else {
-            return res.status(401).send({ error: "Post Not Found...!" });
+            return res.status(404).send({ error: "Post Not Found...!" });
         }
 
     } catch (error) {
@@ -121,7 +121,7 @@ export async function updatePost(req, res) {
 export async function deletePost(req, res) {
     try {
 
-        const { postId } = req.body.postId;
+        const { postId } = req.params;
 
         if (postId) {
             // delete the data
@@ -132,7 +132,7 @@ export async function deletePost(req, res) {
             })
 
         } else {
-            return res.status(401).send({ error: "Post Not Found...!" });
+            return res.status(404).send({ error: "Post Not Found...!" });
         }
 
     } catch (error) {

@@ -17,7 +17,7 @@ export async function verifyUser(req, res, next){
         if (!exist) return res.status(404).send({ error: "Can't find User!" });
         if (exist) {
             const { password, ...responseUser } = exist._doc;
-            return res.status(201).json(responseUser)
+            return res.status(201).send({ msg: "User Verified Successfully", User: responseUser })
         }
         next();
 
@@ -77,7 +77,7 @@ export async function register(req,res){
 
                             // return save result as a response
                             user.save()
-                                .then(result => res.status(201).send({ msg: "User Register Successfully"}))
+                                .then(result => res.status(201).send({ msg: `User Register Successfully, userId is ${user._id}`}))
                                 .catch(error => res.status(500).send({error}))
 
                         }).catch(error => {
@@ -171,7 +171,7 @@ export async function getUser(req,res){
 }
 
 
-/** PUT: http://localhost:8080/api/updateuser 
+/** PUT: http://localhost:8080/api/user/update 
  * @param: {
   "header" : "<token>"
 }
@@ -185,7 +185,7 @@ export async function updateUser(req,res){
     try {
         
         // const id = req.query.id;
-        const { userId } = req.user;
+        const { userId } = req.body;
 
         if(userId){
             const body = req.body;
@@ -206,7 +206,7 @@ export async function updateUser(req,res){
     }
 }
 
-/** DELETE: http://localhost:8080/api/deleteuser 
+/** DELETE: http://localhost:8080/api/user/delete 
  * @param: {
   "header" : "<token>"
 }
@@ -220,13 +220,12 @@ export async function deleteUser(req, res) {
     try {
 
         // const id = req.query.id;
-        const { userId } = req.user;
+        const { userId } = req.params;
 
         if (userId) {
-            const body = req.body;
 
             // update the data
-            UserModel.deleteOne({ _id: userId }, body, function (err, data) {
+            UserModel.deleteOne({ _id: userId }, function (err, data) {
                 if (err) throw err;
 
                 return res.status(201).send({ msg: "Record Deleted...!" });

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+const Schema = mongoose.Schema;
 
 export const PostSchema = new mongoose.Schema({
     title: {
@@ -17,11 +18,7 @@ export const PostSchema = new mongoose.Schema({
         required: [true, "Please provide content for the post"],
         unique: false,
     },
-    author: {
-        type: String,
-        required: [true, "Please provide author's name content"],
-        unique: false,
-    }
+    author: { type: Schema.Types.ObjectId, ref: "User", required: [true, "post should have an author"] }
     
 });
 

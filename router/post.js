@@ -26,7 +26,6 @@ import Auth from '../middleware/auth.js';
  *              - title
  *              - description
  *              - content
- *              - contentType
  *              - author
  *            properties:
  *              title:
@@ -37,10 +36,7 @@ import Auth from '../middleware/auth.js';
  *                default: New post
  *              content:
  *                type: string
- *                default: https://joeschmoe.io/api/v1/random
- *              contentType:
- *                type: string
- *                default: community
+ *                default:  This is a new blog post
  *              author:
  *                type: string
  *                default: meme
@@ -60,13 +56,13 @@ postRouter.route('/').post(controller.create); // create post or content
 
 /**
  * @openapi
- * '/api/post/{username}':
+ * '/api/post/{userId}':
  *  get:
  *     tags:
  *     - Post Controller
  *     summary: Get posts by creator's username
  *     parameters:
- *      - name: username
+ *      - name: userId
  *        in: path
  *        schema:
  *           type: string
@@ -82,17 +78,17 @@ postRouter.route('/').post(controller.create); // create post or content
  *      500:
  *        description: Server Error
  */
-postRouter.route('/:username').get(controller.getUserPosts) // get all user posts with username
+postRouter.route('/:userId').get(controller.getUserPosts) // get all user posts with username
 
 /**
  * @openapi
- * '/api/post/{username}/{id}':
+ * '/api/post/{userId}/{postId}':
  *  get:
  *     tags:
  *     - Post Controller
  *     summary: Get single post by creator's username and postId
  *     parameters:
- *      - name: username
+ *      - name: userId
  *        in: path
  *        description: The username of the creator
  *        required: true
@@ -110,14 +106,14 @@ postRouter.route('/:username').get(controller.getUserPosts) // get all user post
  *      500:
  *        description: Server Error
  */
-postRouter.route('/:username/:id').get(controller.getUserPost) // get a single user post with username and post id
+postRouter.route('/:userId/:postId').get(controller.getUserPost) // get a single user post with username and post id
 
 
 /** PUT Methods */
 
 /**
  * @openapi
- * '/api/post/{id}':
+ * '/api/post/update':
  *  put:
  *     tags:
  *     - Post Controller
@@ -134,6 +130,15 @@ postRouter.route('/:username/:id').get(controller.getUserPost) // get a single u
  *              postId:
  *                type: string
  *                default: ''
+ *              title:
+ *                type: string
+ *                default:  Update 
+ *              description:
+ *                type: string
+ *                default: Updated post
+ *              content:
+ *                type: string
+ *                default:  This is a updated blog post
  *     responses:
  *      200:
  *        description: Modified
@@ -144,13 +149,13 @@ postRouter.route('/:username/:id').get(controller.getUserPost) // get a single u
  *      500:
  *        description: Server Error
  */
-postRouter.route('/:id').put(Auth, controller.updatePost); // is use to update the post
+postRouter.route('/update').put(controller.updatePost); // is use to update the post
 
 /** DELETE Methods */
 
 /**
  * @openapi
- * '/api/post/{id}':
+ * '/api/post/{postId}':
  *  delete:
  *     tags:
  *     - Post Controller
@@ -170,7 +175,7 @@ postRouter.route('/:id').put(Auth, controller.updatePost); // is use to update t
  *      500:
  *        description: Server Error
  */
-postRouter.route('/:id').delete(Auth, controller.deletePost); // is use to delete the post
+postRouter.route('/:postId').delete(controller.deletePost); // is use to delete the post
 
 
 
