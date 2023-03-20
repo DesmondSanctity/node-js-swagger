@@ -6,7 +6,6 @@ config.js
 .env
 /.pnp
 .pnp.js
-swagger.js
 
 # testing
 /coverage
