@@ -25,18 +25,6 @@ const options = {
       },
     ]
   },
-  components: {
-    securitySchemes: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      }
-    }
-  },
-  security: [{
-    bearerAuth: []
-  }],
   // looks for configuration in specified directories
   apis: ['./router/*.js'],
 }
