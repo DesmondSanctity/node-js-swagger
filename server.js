@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import connect from './database/conn.js';
 import userRouter from './router/user.js';
 import postRouter from './router/post.js';
-import swaggerDocs from './swagger.js'
 
 
 dotenv.config()
