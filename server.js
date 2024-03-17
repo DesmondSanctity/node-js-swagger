@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import connect from './database/conn.js';
 import userRouter from './router/user.js';
 import postRouter from './router/post.js';
+import commentRouter from './router/comment.js';
 
 
 dotenv.config()
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 /** api routes */
 app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
+app.use('/api/comment', commentRouter)
 
 /** start server only when we have valid connection */
 connect().then(() => {
